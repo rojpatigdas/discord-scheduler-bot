@@ -115,7 +115,7 @@ Watch the full demo here:
 👋 Hi, I’m **Rojenn Clyde G. Patigdas** — an automation specialist with experience building scalable n8n workflows for internal systems, client services, and productivity tools.  
 I specialize in integrating CRMs, task managers, chat tools, and APIs into reliable automations.
 
-📫 Contact me on [LinkedIn](www.linkedin.com/in/rojenn-clyde-patigdas-0993041a5) 
+📫 Contact me on [LinkedIn](https://www.linkedin.com/in/rojenn-clyde-patigdas-0993041a5) 
 
 ---
 
