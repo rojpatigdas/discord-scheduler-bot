@@ -103,12 +103,6 @@ To test:
 
 ---
 
-## 📺 Demo Video
-
-Watch the full demo here:  
-👉 [Loom Video Link Goes Here](#)
-
----
 
 ## 🙋‍♂️ About the Creator
 
