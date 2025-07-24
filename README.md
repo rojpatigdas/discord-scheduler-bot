@@ -1,168 +1,124 @@
-# discord-scheduler-slash-commands
 
-A Discord bot that allows users to schedule events via slash commands, automatically adding them to Google Calendar, notifying Discord, and optionally creating an Asana task. Integrates with n8n via webhook for automation.
+# 📆 Discord Scheduler Bot with n8n Integration
 
----
-
-## ✨ Features
-
-- `/schedule`: Schedule an event with a modal form (title, date, time, description).
-- `/help`: Get instructions on how to use the bot.
-- Google Calendar integration via n8n webhook.
-- Optional Asana task creation.
-- Ephemeral responses for privacy.
-- Supports custom test guild and global command registration.
+This is a demonstration project built to showcase automation expertise using **n8n**, **Discord**, **Google Calendar**, and optionally **Asana or Copper CRM**. The system allows users to schedule meetings via a slash command in Discord, and automates downstream tasks including event creation, Google Meet link generation, and task creation in a chosen platform.
 
 ---
 
-## ⚙️ Prerequisites
+## 📌 Project Purpose
 
-- Node.js v16.9.0 or higher
-- A Discord bot application with a token
-- n8n workflow URL for webhook integration
-- (Optional) Asana integration set up in your n8n workflow
+This project was developed specifically for an **Automation Specialist demo**. My other real-world n8n workflows contain sensitive company and client data, so this clean and shareable build demonstrates my ability to:
 
----
-
-## 🚀 Enabling the Bot in Discord
-
-### 1. Create a Discord Application and Bot
-
-- Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-- Click **New Application**, give it a name, and save.
-- In the left sidebar, go to **Bot** and click **Add Bot**.
-- Under **Token**, click **Reset Token** and copy the token (you’ll use this in your `.env`).
-- Under **OAuth2 > General**, copy the **Client ID** (you’ll use this in your `.env`).
-
-### 2. Invite the Bot to Your Server
-
-- Go to **OAuth2 > URL Generator** in your application settings.
-- Under **Scopes**, select `bot` and `applications.commands`.
-- Under **Bot Permissions**, select:
-  - `Send Messages`
-  - `Embed Links`
-  - And any other permissions your bot needs
-- Copy the generated URL, open it in your browser, and invite the bot to your server.
+- Design end-to-end automation systems
+- Integrate multiple APIs and tools
+- Build custom Discord bot logic
+- Handle branching workflows, error handling, and third-party authentication
 
 ---
 
-## 🔁 Setting Up n8n Automation
+## ⚙️ Features
 
-### 1. Create a New Workflow in n8n
+✅ `/schedule` command in Discord  
+✅ Modal form input (title, date, time, description)  
+✅ Real-time submission to an n8n webhook  
+✅ Automatic Google Calendar event creation with Meet link  
+✅ Notification back to Discord  
+✅ Conditional creation of task in:
+- Asana, or  
+- Copper CRM  
 
-- Add a **Webhook** node. Set the HTTP Method to `POST` and copy the webhook URL.
-- The bot will send a payload like:
+---
 
-```json
-{
-  "title": "Event Title",
-  "description": "Event Description",
-  "start": "2024-05-01T10:00:00.000+08:00",
-  "end": "2024-05-01T11:00:00.000+08:00",
-  "formatted": "2024-05-01 10:00",
-  "asana": true
-}
-```
+## 🧠 Architecture Overview
 
-- Add nodes to process the data:
-  - **Google Calendar**: Use the event data to create a new event.
-  - **Asana** (optional): If `asana` is `true`, create a task in Asana.
-  - **Discord** (optional): Use a Discord node or webhook to send a confirmation message back to the server.
-
-### 2. Activate the Workflow
-
-- Ensure your workflow is **active** and the webhook is accessible publicly.
-
-### 3. Update Your `.env`
-
-```env
-WEBHOOK_URL=https://your-n8n-instance/webhook/your-workflow
+```text
+Discord (Slash Command + Modal)
+         │
+         ▼
+n8n Webhook Node
+         │
+   ┌──────────────┐
+   │ Google Calendar │ → Generates Meet link
+   └──────────────┘
+         │
+         ▼
+Discord: Confirmation message
+         │
+         ▼
+IF node → Create Asana task / Create Copper CRM task
 ```
 
 ---
 
-## 🛠️ Setup
+## 🛠 Technologies Used
 
-### 1. Clone the Repository
+- **n8n** (self-hosted or cloud)
+- **Discord.js (Node.js)** for the slash command and modal
+- **Google Calendar API**
+- **Asana API** or **Copper CRM API**
+- **Luxon** for time and date parsing
 
+---
+
+## 🚀 How to Run the Project
+
+### 1. Clone the Bot
 ```bash
-git clone https://github.com/rojpatigdas/discord-scheduler-bot.git
-cd discord-scheduler-bot
-```
-
-### 2. Install Dependencies
-
-```bash
+git clone https://github.com/yourusername/discord-n8n-scheduler.git
+cd discord-n8n-scheduler
 npm install
 ```
 
-### 3. Create a `.env` File
-
-```env
-TOKEN=your-discord-bot-token
-CLIENT_ID=your-discord-application-client-id
-GUILD_ID=your-test-guild-id     # Only needed for development registration
-WEBHOOK_URL=https://your-n8n-instance/webhook/your-workflow
+### 2. Set up Environment Variables
+Create a `.env` file:
+```
+TOKEN=your_discord_bot_token
+CLIENT_ID=your_discord_client_id
+GUILD_ID=your_discord_server_id
+N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/scheduler
 ```
 
----
-
-## 💡 Usage
-
-### Register Slash Commands
-
-- **For a test server (recommended during development):**
-
+### 3. Register Commands
 ```bash
-npm run register
+node register-commands.js
 ```
 
-- **For global registration (production):**
-
-The bot will register global commands automatically on startup.
-
-### Start the Bot
-
+### 4. Run the Bot
 ```bash
-npm start
+node index.js
 ```
 
-### Commands
+---
 
-- `/schedule`: Opens a modal to input event details. After submitting, you can choose whether to create an Asana task.
-- `/help`: Shows usage instructions and formatting tips.
+## 🧪 Testing
+
+To test:
+1. Type `/schedule` in any Discord channel where your bot is installed.
+2. Fill in the modal with event details.
+3. Select either **Asana** or **Copper** in the dropdown.
+4. Check:
+   - Google Calendar for the event with Meet link
+   - Discord for the confirmation message
+   - Asana/Copper for the created task
 
 ---
 
-## 🌐 Environment Variables
+## 📺 Demo Video
 
-| Variable      | Description                                 |
-|---------------|---------------------------------------------|
-| `TOKEN`       | Discord bot token                           |
-| `CLIENT_ID`   | Discord application client ID               |
-| `GUILD_ID`    | Discord server (guild) ID for test commands |
-| `WEBHOOK_URL` | n8n webhook URL for event handling          |
+Watch the full demo here:  
+👉 [Loom Video Link Goes Here](#)
 
 ---
 
-## 🔄 Event Flow
+## 🙋‍♂️ About the Creator
 
-1. User runs `/schedule` and fills out the modal.
-2. Bot validates input and prompts for Asana task creation.
-3. On confirmation, bot sends event data to the configured n8n webhook.
-4. n8n handles Google Calendar and (optionally) Asana automation.
+👋 Hi, I’m **Rojenn Clyde G. Patigdas** — an automation specialist with experience building scalable n8n workflows for internal systems, client services, and productivity tools.  
+I specialize in integrating CRMs, task managers, chat tools, and APIs into reliable automations.
 
----
-
-## 📦 Dependencies
-
-- [discord.js](https://discord.js.org/)
-- [dotenv](https://www.npmjs.com/package/dotenv)
-- [luxon](https://moment.github.io/luxon/)
-- [node-fetch](https://www.npmjs.com/package/node-fetch)
+📫 Contact me on [LinkedIn](#) or visit [my portfolio](#)
 
 ---
 
-## 🪪 License
+## 📝 License
 
-ISC
+This project is for demo and educational purposes only. Do not use in production without modifying authentication and data validation.
